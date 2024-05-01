@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoardGame;
+using System;
 
 namespace TerminalChess
 {
@@ -6,7 +7,9 @@ namespace TerminalChess
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Position Position = new Position(3, 4);
+
+            Console.WriteLine("Test: " + Position.ReturnData());
         }
     }
 }

@@ -15,7 +15,7 @@ namespace TerminalChess
             {
                 for (int j = 0; j < Board.Columns; j++)
                 {
-                    if (Board.Part(j, i) == null)
+                    if (Board.Part(i, j) == null)
                     {
                         Console.Write("- ");
                     }

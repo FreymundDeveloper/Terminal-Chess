@@ -23,5 +23,11 @@ namespace BoardGame
         {
             return Parts![row, column];
         }
+
+        public void PutPart(Part part, Position position)
+        {
+            Parts![position.Row, position.Column] = part;
+            part.Position = position;
+        }
     }
 }

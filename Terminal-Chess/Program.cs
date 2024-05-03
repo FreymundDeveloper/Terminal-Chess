@@ -9,6 +9,7 @@ namespace TerminalChess
         {
             Position Position = new Position(3, 4);
             Board Board = new Board(8, 8);
+            Screen.PrintBoard(Board);
 
             Console.WriteLine("Test: " + Position.ReturnData());
         }

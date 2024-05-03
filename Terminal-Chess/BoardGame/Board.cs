@@ -18,5 +18,10 @@ namespace BoardGame
             Columns = columns;
             Parts = new Part[Rows, Columns];
         }
+
+        public Part Part(int row, int column)
+        {
+            return Parts![row, column];
+        }
     }
 }

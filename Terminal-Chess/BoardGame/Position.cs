@@ -16,6 +16,12 @@ namespace BoardGame
             Column = column; 
         }
 
+        public void DefineValues(int row, int column)
+        {
+            Row = row;
+            Column = column;
+        }
+
         public string ReturnData()
         {
             return $"{Row}, {Column}";

@@ -18,7 +18,12 @@ namespace TerminalChess
 
                     Console.Write("\nOrigin: ");
                     Position origin = Screen.ReadPositionChess().ToPosition();
-                    Console.Write("Destination: ");
+
+                    bool[,] possiblePositions = MatchChess.Board!.Part(origin).PossibleMoves();
+                    Console.Clear();
+                    Screen.PrintBoard(MatchChess.Board!, possiblePositions);
+
+                    Console.Write("\nDestination: ");
                     Position destination = Screen.ReadPositionChess().ToPosition();
 
                     MatchChess.ExecuteMove(origin, destination);

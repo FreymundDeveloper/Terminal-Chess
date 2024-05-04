@@ -17,20 +17,35 @@ namespace TerminalChess
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < Board.Columns; j++)
                 {
-                    if (Board.Part(i, j) == null)
-                    {
-                        Console.Write("- ");
-                    }
-                    else
-                    {
-                        PrintPart(Board.Part(i, j));
-                        Console.Write(" ");
-                    }
+                    PrintPart(Board.Part(i, j));
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
         }
+
+        public static void PrintBoard(Board Board, bool[,] possiblePositions)
+        {
+            ConsoleColor displayOrigin = Console.BackgroundColor;
+            ConsoleColor displayChaged = ConsoleColor.DarkGray;
+
+            for (int i = 0; i < Board.Rows; i++)
+            {
+                Console.Write(8 - i + " ");
+                for (int j = 0; j < Board.Columns; j++)
+                {
+                    if (possiblePositions[i, j]) Console.BackgroundColor = displayChaged;
+                    else Console.BackgroundColor = displayOrigin;
+
+                    PrintPart(Board.Part(i, j));
+                    Console.BackgroundColor = displayOrigin;
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+            Console.BackgroundColor = displayOrigin;
+        }
+
         public static PositionChess ReadPositionChess()
         {
             string digit = Console.ReadLine()!;
@@ -41,14 +56,19 @@ namespace TerminalChess
 
         public static void PrintPart(Part part) 
         {
-            if (part.Color == Color.White) Console.Write(part);
+            if (part == null) Console.Write("- ");
             else
             {
-                ConsoleColor aid = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(part);
-                Console.ForegroundColor = aid;
+                if (part.Color == Color.White) Console.Write(part);
+                else
+                {
+                    ConsoleColor aid = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(part);
+                    Console.ForegroundColor = aid;
 
+                }
+                Console.Write(" ");
             }
         }
     }

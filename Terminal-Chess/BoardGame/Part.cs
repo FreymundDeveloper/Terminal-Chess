@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BoardGame
 {
-    internal class Part
+    abstract class Part
     {
         public Position? Position { get; set; } 
         public Color? Color { get; protected set; }
@@ -24,5 +24,7 @@ namespace BoardGame
         {
             NumberOfMoves++;
         }
+
+        public abstract bool[,] PossibleMoves();
     }
 }

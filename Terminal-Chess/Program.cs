@@ -8,7 +8,7 @@ namespace TerminalChess
     {
         static void Main(string[] args)
         {
-            try {
+            /*try {
                 Board Board = new Board(8, 8);
 
                 Board.PutPart(new Tower(Board, Color.Black), new Position(0, 0));
@@ -19,7 +19,10 @@ namespace TerminalChess
             }
             catch (BoardGameException e) {
                 Console.WriteLine(e.Message);
-            }
+            }*/
+
+            PositionChess PositionChess = new PositionChess('c', 7);
+            Console.WriteLine(PositionChess.ToPosition().ReturnData());
         }
     }
 }

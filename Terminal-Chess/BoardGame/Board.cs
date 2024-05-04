@@ -10,7 +10,7 @@ namespace BoardGame
     {
         public int Rows { get; set; }
         public int Columns { get; set; }
-        public Part[,]? Parts;
+        public Part[,] Parts;
 
         public Board(int rows, int columns)
         {
@@ -29,6 +29,7 @@ namespace BoardGame
             return Parts![position.Row, position.Column];
         }
 
+        // Part Moves
         public void PutPart(Part part, Position position)
         {
             if (HavePart(position)) throw new BoardGameException("The Board already has this Position!");
@@ -36,6 +37,18 @@ namespace BoardGame
             part.Position = position;
         }
 
+        public Part? RemovePart(Position position) 
+        {
+            if (Part(position) == null) return null;
+
+            Part aid = Part(position);
+            aid.Position = null;
+            Parts[position.Row, position.Column] = null!;
+            return aid;
+
+        }
+
+        // Validations
         public bool HavePart(Position position)
         {
             ValidatePosition(position);

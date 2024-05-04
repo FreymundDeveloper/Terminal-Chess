@@ -9,15 +9,21 @@ namespace TerminalChess
         static void Main(string[] args)
         {
             try {
-                Board Board = new Board(8, 8);
+                MatchChess MatchChess = new MatchChess();
 
-                Board.PutPart(new Tower(Board, Color.Black), new Position(0, 0));
-                Board.PutPart(new Tower(Board, Color.Black), new Position(1, 3));
-                Board.PutPart(new King(Board, Color.Black), new Position(0, 2));
+                while (!MatchChess.Finished)
+                {
+                    Console.Clear();
+                    Screen.PrintBoard(MatchChess.Board!);
 
-                Board.PutPart(new Tower(Board, Color.White), new Position(5, 3));
+                    Console.Write("\nOrigin: ");
+                    Position origin = Screen.ReadPositionChess().ToPosition();
+                    Console.Write("Destination: ");
+                    Position destination = Screen.ReadPositionChess().ToPosition();
 
-                Screen.PrintBoard(Board);
+                    MatchChess.ExecuteMove(origin, destination);
+                }
+
             }
             catch (BoardGameException e) {
                 Console.WriteLine(e.Message);

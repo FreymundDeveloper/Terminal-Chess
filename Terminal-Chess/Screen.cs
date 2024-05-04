@@ -1,4 +1,5 @@
 ﻿using BoardGame;
+using Chess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,13 @@ namespace TerminalChess
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
+        }
+        public static PositionChess ReadPositionChess()
+        {
+            string digit = Console.ReadLine()!;
+            char column = digit[0];
+            int row = int.Parse(digit[1] + "");
+            return new PositionChess(column, row);
         }
 
         public static void PrintPart(Part part) 

@@ -20,5 +20,9 @@ namespace BoardGame
             NumberOfMoves = 0;
         }
 
+        public void IncreaseNumberOfMoves()
+        {
+            NumberOfMoves++;
+        }
     }
 }

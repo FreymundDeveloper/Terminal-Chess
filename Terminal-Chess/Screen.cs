@@ -13,6 +13,7 @@ namespace TerminalChess
         {
             for (int i = 0; i < Board.Rows;  i++)
             {
+                Console.Write(8 - i + " ");
                 for (int j = 0; j < Board.Columns; j++)
                 {
                     if (Board.Part(i, j) == null)
@@ -21,10 +22,25 @@ namespace TerminalChess
                     }
                     else
                     {
-                        Console.Write(Board.Part(i, j) + " ");
+                        PrintPart(Board.Part(i, j));
+                        Console.Write(" ");
                     }
                 }
                 Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static void PrintPart(Part part) 
+        {
+            if (part.Color == Color.White) Console.Write(part);
+            else
+            {
+                ConsoleColor aid = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(part);
+                Console.ForegroundColor = aid;
+
             }
         }
     }

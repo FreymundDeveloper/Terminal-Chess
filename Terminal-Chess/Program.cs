@@ -16,10 +16,7 @@ namespace TerminalChess
                     try
                     {
                         Console.Clear();
-                        Screen.PrintBoard(MatchChess.Board!);
-                        Console.WriteLine();
-                        Console.WriteLine("Turn: " + MatchChess.Turn);
-                        Console.WriteLine("Waiting play: " + MatchChess.CurrentPlayer);
+                        Screen.PrintMatch(MatchChess);
 
                         Console.Write("\nOrigin: ");
                         Position origin = Screen.ReadPositionChess().ToPosition();

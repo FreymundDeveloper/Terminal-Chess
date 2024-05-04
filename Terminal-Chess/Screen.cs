@@ -10,6 +10,41 @@ namespace TerminalChess
 {
     internal class Screen
     {
+        public static void PrintMatch(MatchChess matchChess)
+        {
+            PrintBoard(matchChess.Board!);
+
+            Console.WriteLine();
+            PrintCapturedParts(matchChess);
+
+            Console.WriteLine();
+            Console.WriteLine("Turn: " + matchChess.Turn);
+            Console.WriteLine("Waiting play: " + matchChess.CurrentPlayer);
+        }
+
+        public static void PrintCapturedParts(MatchChess matchChess)
+        {
+            Console.WriteLine("Captureds parts: ");
+            Console.Write("White: ");
+            PrintGroup(matchChess.CapturedsParts(Color.White));
+
+            Console.Write("\nBlack: ");
+            ConsoleColor aid = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            PrintGroup(matchChess.CapturedsParts(Color.Black));
+            Console.ForegroundColor = aid;
+        }
+
+        public static void PrintGroup(HashSet<Part> group)
+        {
+            Console.Write("[");
+            foreach (Part x in group) {
+                Console.Write(x + " ");
+            }
+            Console.WriteLine("]");
+        }
+
         public static void PrintBoard(Board Board)
         {
             for (int i = 0; i < Board.Rows;  i++)

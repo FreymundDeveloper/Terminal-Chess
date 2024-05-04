@@ -10,8 +10,8 @@ namespace Chess
     internal class MatchChess
     {
         public Board? Board { get; private set; }
-        private int Turn;
-        private Color? CurrentPlayer;
+        public int Turn { get; private set; }
+        public Color? CurrentPlayer { get; private set; }
         public bool Finished { get; private set; }
 
         public MatchChess()
@@ -29,6 +29,31 @@ namespace Chess
             part.IncreaseNumberOfMoves();
             Part partTaked = Board!.RemovePart(destination)!;
             Board.PutPart(part, destination);
+        }
+
+        public void MakePlay(Position origin, Position destination)
+        {
+            ExecuteMove(origin, destination);
+            Turn++;
+            ChangePlayer();
+        }
+
+        public void ValidateOriginPosition(Position position) 
+        {
+            if (Board?.Part(position) == null) throw new BoardGameException("There is no part in the origin position of the choice!");
+            if (CurrentPlayer != Board?.Part(position).Color) throw new BoardGameException("The origin part chosen is't yours!");
+            if (!(Board!.Part(position).HavePossibleMoves())) throw new BoardGameException("There is no moves in the origin part chosen!");
+        }
+
+        public void ValidateDestinationPosition(Position origin, Position destination) 
+        {
+            if (!(Board!.Part(origin).CanMoveTo(destination))) throw new BoardGameException("Destination position invalid!");
+        }
+
+        private void ChangePlayer()
+        {
+            if (CurrentPlayer == Color.White) CurrentPlayer = Color.Black;
+            else CurrentPlayer = Color.White;
         }
 
         private void PutParts()

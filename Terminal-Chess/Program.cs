@@ -13,20 +13,33 @@ namespace TerminalChess
 
                 while (!MatchChess.Finished)
                 {
-                    Console.Clear();
-                    Screen.PrintBoard(MatchChess.Board!);
+                    try
+                    {
+                        Console.Clear();
+                        Screen.PrintBoard(MatchChess.Board!);
+                        Console.WriteLine();
+                        Console.WriteLine("Turn: " + MatchChess.Turn);
+                        Console.WriteLine("Waiting play: " + MatchChess.CurrentPlayer);
 
-                    Console.Write("\nOrigin: ");
-                    Position origin = Screen.ReadPositionChess().ToPosition();
+                        Console.Write("\nOrigin: ");
+                        Position origin = Screen.ReadPositionChess().ToPosition();
+                        MatchChess.ValidateOriginPosition(origin);
 
-                    bool[,] possiblePositions = MatchChess.Board!.Part(origin).PossibleMoves();
-                    Console.Clear();
-                    Screen.PrintBoard(MatchChess.Board!, possiblePositions);
+                        bool[,] possiblePositions = MatchChess.Board!.Part(origin).PossibleMoves();
+                        Console.Clear();
+                        Screen.PrintBoard(MatchChess.Board!, possiblePositions);
 
-                    Console.Write("\nDestination: ");
-                    Position destination = Screen.ReadPositionChess().ToPosition();
+                        Console.Write("\nDestination: ");
+                        Position destination = Screen.ReadPositionChess().ToPosition();
+                        MatchChess.ValidateDestinationPosition(origin, destination);
 
-                    MatchChess.ExecuteMove(origin, destination);
+                        MatchChess.MakePlay(origin, destination);
+                    }
+                    catch (BoardGameException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
                 }
 
             }

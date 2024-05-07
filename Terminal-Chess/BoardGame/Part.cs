@@ -25,6 +25,11 @@ namespace BoardGame
             NumberOfMoves++;
         }
 
+        public void DecrementNumberOfMoves()
+        {
+            NumberOfMoves--;
+        }
+
         public bool HavePossibleMoves()
         {
             bool[,] matrix = PossibleMoves();

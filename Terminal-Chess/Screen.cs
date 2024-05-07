@@ -19,9 +19,14 @@ namespace TerminalChess
 
             Console.WriteLine();
             Console.WriteLine("Turn: " + matchChess.Turn);
-            Console.WriteLine("Waiting play: " + matchChess.CurrentPlayer);
 
-            if (matchChess.Check) Console.WriteLine("CHECK!");
+            if (!matchChess.Finished)
+            {
+                Console.WriteLine("Waiting play: " + matchChess.CurrentPlayer);
+
+                if (matchChess.Check) Console.WriteLine("CHECK!");
+            }
+            else Console.WriteLine($"Checkmate!\nWinner: {matchChess.CurrentPlayer}");
         }
 
         public static void PrintCapturedParts(MatchChess matchChess)

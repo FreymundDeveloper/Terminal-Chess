@@ -29,6 +29,7 @@ namespace Chess
             PutParts();
         }
 
+        // Moves Methods
         public Part ExecuteMove(Position origin, Position destination)
         {
             Part part = Board!.RemovePart(origin)!;
@@ -66,10 +67,15 @@ namespace Chess
             if (IsInCheck(Rival(CurrentPlayer))) Check = true;
             else Check = false;
 
-            Turn++;
-            ChangePlayer();
+            if (IsACheckmate(Rival(CurrentPlayer))) Finished = true;
+            else
+            {
+                Turn++;
+                ChangePlayer();
+            }
         }
 
+        // Validate Methods
         public void ValidateOriginPosition(Position position) 
         {
             if (Board?.Part(position) == null) throw new BoardGameException("There is no part in the origin position of the choice!");
@@ -136,6 +142,36 @@ namespace Chess
                 if (matrix[theKing.Position!.Row, theKing.Position.Column]) return true;
             }
             return false;
+        }
+
+        public bool IsACheckmate(Color color)
+        {
+            if (!IsInCheck(color)) return false;
+
+            foreach (Part x in InGameParts(color))
+            {
+                bool[,] matrix = x.PossibleMoves();
+
+                for (int i = 0; i < Board!.Rows; i++)
+                {
+                    for (int j = 0; j < Board!.Columns; j++)
+                    {
+                        if (matrix[i, j])
+                        {
+                            Position origin = x.Position!;
+                            Position destination = new Position(i, j);
+
+                            Part partTaked = ExecuteMove(origin, destination);
+                            bool checkTest = IsInCheck(color);
+
+                            UndoMove(origin, destination, partTaked);
+
+                            if (!checkTest) return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         public void PutNewPart(char column, int row, Part part)

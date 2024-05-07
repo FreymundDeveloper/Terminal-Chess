@@ -38,6 +38,8 @@ namespace TerminalChess
                         Console.ReadLine();
                     }
                 }
+                Console.Clear();
+                Screen.PrintMatch(MatchChess);
 
             }
             catch (BoardGameException e) {

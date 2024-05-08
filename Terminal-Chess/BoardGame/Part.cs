@@ -9,7 +9,7 @@ namespace BoardGame
     abstract class Part
     {
         public Position? Position { get; set; } 
-        public Color? Color { get; protected set; }
+        public Color Color { get; protected set; }
         public int NumberOfMoves { get; protected set; }
         public Board? Board { get; protected set; }
 

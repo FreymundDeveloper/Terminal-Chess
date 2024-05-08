@@ -139,6 +139,22 @@ namespace Chess
                 throw new BoardGameException("You cannot put yourself in check!");
             }
 
+            Part part = Board!.Part(destination);
+
+            // # Special - Promotion
+            if (part is Pawn)
+            {
+                if ((part.Color == Color.White && destination.Row == 0) || (part.Color == Color.Black && destination.Row == 7))
+                {
+                    part = Board!.RemovePart(destination)!;
+                    Parts.Remove(part);
+
+                    Part queen = new Queen(Board, part.Color);
+                    Board.PutPart(queen, destination);
+                    Parts.Add(queen);
+                }
+            }
+
             if (IsInCheck(Rival(CurrentPlayer))) Check = true;
             else Check = false;
 
@@ -148,8 +164,6 @@ namespace Chess
                 Turn++;
                 ChangePlayer();
             }
-
-            Part part = Board!.Part(destination);
 
             // # Special - En Passant
             if (part is Pawn && (destination.Row == origin.Row - 2 || destination.Row == origin.Row + 2)) VulnerableEnPassant = part;

@@ -39,6 +39,28 @@ namespace Chess
 
             if (partTaked != null) Captureds.Add(partTaked);
 
+            // # Special - Short Castling
+            if (part is King && destination.Column == origin.Column + 2)
+            {
+                Position originTower = new Position(origin.Row, origin.Column + 3);
+                Position destinationTower = new Position(origin.Row, origin.Column + 1);
+
+                Part tower = Board.RemovePart(originTower)!;
+                tower.IncreaseNumberOfMoves();
+                Board.PutPart(tower, destinationTower);
+            }
+
+            // # Special - Long Castling
+            if (part is King && destination.Column == origin.Column - 2)
+            {
+                Position originTower = new Position(origin.Row, origin.Column - 4);
+                Position destinationTower = new Position(origin.Row, origin.Column - 1);
+
+                Part tower = Board.RemovePart(originTower)!;
+                tower.IncreaseNumberOfMoves();
+                Board.PutPart(tower, destinationTower);
+            }
+
             return partTaked!;
         }
 
@@ -52,6 +74,28 @@ namespace Chess
                 Captureds.Remove(partTaked);
             }
             Board.PutPart(part, origin);
+
+            // # Special - Short Castling
+            if (part is King && destination.Column == origin.Column + 2)
+            {
+                Position originTower = new Position(origin.Row, origin.Column + 3);
+                Position destinationTower = new Position(origin.Row, origin.Column + 1);
+
+                Part tower = Board.RemovePart(destinationTower)!;
+                tower.DecrementNumberOfMoves();
+                Board.PutPart(tower, originTower);
+            }
+
+            // # Special - Long Castling
+            if (part is King && destination.Column == origin.Column - 2)
+            {
+                Position originTower = new Position(origin.Row, origin.Column - 4);
+                Position destinationTower = new Position(origin.Row, origin.Column - 1);
+
+                Part tower = Board.RemovePart(destinationTower)!;
+                tower.DecrementNumberOfMoves();
+                Board.PutPart(tower, originTower);
+            }
         }
 
         public void MakePlay(Position origin, Position destination)
@@ -75,7 +119,7 @@ namespace Chess
             }
         }
 
-        // Validate Methods
+        // Validate Exceptions Methods
         public void ValidateOriginPosition(Position position) 
         {
             if (Board?.Part(position) == null) throw new BoardGameException("There is no part in the origin position of the choice!");
@@ -88,6 +132,7 @@ namespace Chess
             if (!(Board!.Part(origin).CanMoveTo(destination))) throw new BoardGameException("Destination position invalid!");
         }
 
+        // Miscellaneous Methods
         private void ChangePlayer()
         {
             if (CurrentPlayer == Color.White) CurrentPlayer = Color.Black;
@@ -174,6 +219,7 @@ namespace Chess
             return true;
         }
 
+        // Parts Manipulate Methods
         public void PutNewPart(char column, int row, Part part)
         {
             Board!.PutPart(part, new PositionChess(column, row).ToPosition());
@@ -187,7 +233,7 @@ namespace Chess
             PutNewPart('b', 1, new Horse(Board!, Color.White));
             PutNewPart('c', 1, new Bishop(Board!, Color.White));
             PutNewPart('d', 1, new Queen(Board!, Color.White));
-            PutNewPart('e', 1, new King(Board!, Color.White));
+            PutNewPart('e', 1, new King(Board!, Color.White, this));
             PutNewPart('f', 1, new Bishop(Board!, Color.White));
             PutNewPart('g', 1, new Horse(Board!, Color.White));
             PutNewPart('h', 1, new Tower(Board!, Color.White));
@@ -206,7 +252,7 @@ namespace Chess
             PutNewPart('b', 8, new Horse(Board!, Color.Black));
             PutNewPart('c', 8, new Bishop(Board!, Color.Black));
             PutNewPart('d', 8, new Queen(Board!, Color.Black));
-            PutNewPart('e', 8, new King(Board!, Color.Black));
+            PutNewPart('e', 8, new King(Board!, Color.Black, this));
             PutNewPart('f', 8, new Bishop(Board!, Color.Black));
             PutNewPart('g', 8, new Horse(Board!, Color.Black));
             PutNewPart('h', 8, new Tower(Board!, Color.Black));

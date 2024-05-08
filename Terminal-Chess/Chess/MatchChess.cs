@@ -14,6 +14,7 @@ namespace Chess
         public Color CurrentPlayer { get; private set; }
         public bool Finished { get; private set; }
         public bool Check {  get; private set; }
+        public Part? VulnerableEnPassant { get; private set; }
         private HashSet<Part> Parts;
         private HashSet<Part> Captureds;
 
@@ -24,6 +25,7 @@ namespace Chess
             CurrentPlayer = Color.White;
             Finished = false;
             Check = false;
+            VulnerableEnPassant = null!;
             Parts = new HashSet<Part>();
             Captureds = new HashSet<Part>();
             PutParts();
@@ -61,6 +63,20 @@ namespace Chess
                 Board.PutPart(tower, destinationTower);
             }
 
+            // # Special - En Passant
+            if (part is Pawn)
+            {
+                if (origin.Column != destination.Column && partTaked == null)
+                {
+                    Position positionPawn;
+                    if (part.Color == Color.White) positionPawn = new Position(destination.Row + 1, destination.Column);
+                    else positionPawn = new Position(destination.Row - 1, destination.Column);
+
+                    partTaked = Board!.RemovePart(positionPawn)!;
+                    Captureds.Add(partTaked);
+                }
+            }
+
             return partTaked!;
         }
 
@@ -96,6 +112,21 @@ namespace Chess
                 tower.DecrementNumberOfMoves();
                 Board.PutPart(tower, originTower);
             }
+
+            // # Special - En Passant
+            if (part is Pawn)
+            {
+                if (origin.Column != destination.Column && partTaked == VulnerableEnPassant)
+                {
+                    Part pawn = Board!.RemovePart(destination)!;
+                    Position positionPawn;
+
+                    if (part.Color == Color.White) positionPawn = new Position(3, destination.Column);
+                    else positionPawn = new Position(4, destination.Column);
+
+                    Board.PutPart(pawn, positionPawn);
+                }
+            }
         }
 
         public void MakePlay(Position origin, Position destination)
@@ -117,6 +148,12 @@ namespace Chess
                 Turn++;
                 ChangePlayer();
             }
+
+            Part part = Board!.Part(destination);
+
+            // # Special - En Passant
+            if (part is Pawn && (destination.Row == origin.Row - 2 || destination.Row == origin.Row + 2)) VulnerableEnPassant = part;
+            else VulnerableEnPassant = null!;
         }
 
         // Validate Exceptions Methods
@@ -238,14 +275,14 @@ namespace Chess
             PutNewPart('g', 1, new Horse(Board!, Color.White));
             PutNewPart('h', 1, new Tower(Board!, Color.White));
 
-            PutNewPart('a', 2, new Pawn(Board!, Color.White));
-            PutNewPart('b', 2, new Pawn(Board!, Color.White));
-            PutNewPart('c', 2, new Pawn(Board!, Color.White));
-            PutNewPart('d', 2, new Pawn(Board!, Color.White));
-            PutNewPart('e', 2, new Pawn(Board!, Color.White));
-            PutNewPart('f', 2, new Pawn(Board!, Color.White));
-            PutNewPart('g', 2, new Pawn(Board!, Color.White));
-            PutNewPart('h', 2, new Pawn(Board!, Color.White));
+            PutNewPart('a', 2, new Pawn(Board!, Color.White, this));
+            PutNewPart('b', 2, new Pawn(Board!, Color.White, this));
+            PutNewPart('c', 2, new Pawn(Board!, Color.White, this));
+            PutNewPart('d', 2, new Pawn(Board!, Color.White, this));
+            PutNewPart('e', 2, new Pawn(Board!, Color.White, this));
+            PutNewPart('f', 2, new Pawn(Board!, Color.White, this));
+            PutNewPart('g', 2, new Pawn(Board!, Color.White, this));
+            PutNewPart('h', 2, new Pawn(Board!, Color.White, this));
 
             // Black Parts
             PutNewPart('a', 8, new Tower(Board!, Color.Black));
@@ -257,14 +294,14 @@ namespace Chess
             PutNewPart('g', 8, new Horse(Board!, Color.Black));
             PutNewPart('h', 8, new Tower(Board!, Color.Black));
 
-            PutNewPart('a', 7, new Pawn(Board!, Color.Black));
-            PutNewPart('b', 7, new Pawn(Board!, Color.Black));
-            PutNewPart('c', 7, new Pawn(Board!, Color.Black));
-            PutNewPart('d', 7, new Pawn(Board!, Color.Black));
-            PutNewPart('e', 7, new Pawn(Board!, Color.Black));
-            PutNewPart('f', 7, new Pawn(Board!, Color.Black));
-            PutNewPart('g', 7, new Pawn(Board!, Color.Black));
-            PutNewPart('h', 7, new Pawn(Board!, Color.Black));
+            PutNewPart('a', 7, new Pawn(Board!, Color.Black, this));
+            PutNewPart('b', 7, new Pawn(Board!, Color.Black, this));
+            PutNewPart('c', 7, new Pawn(Board!, Color.Black, this));
+            PutNewPart('d', 7, new Pawn(Board!, Color.Black, this));
+            PutNewPart('e', 7, new Pawn(Board!, Color.Black, this));
+            PutNewPart('f', 7, new Pawn(Board!, Color.Black, this));
+            PutNewPart('g', 7, new Pawn(Board!, Color.Black, this));
+            PutNewPart('h', 7, new Pawn(Board!, Color.Black, this));
         }
     }
 }

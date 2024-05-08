@@ -9,7 +9,12 @@ namespace Chess
 {
     class Pawn : Part
     {
-        public Pawn(Board board, Color color) : base(board, color) { }
+        private MatchChess MatchChess;
+
+        public Pawn(Board board, Color color, MatchChess matchChess) : base(board, color) 
+        {
+            MatchChess = matchChess;
+        }
 
         public override string ToString()
         {
@@ -48,6 +53,16 @@ namespace Chess
 
                 positionNow.DefineValues(Position!.Row - 1, Position!.Column + 1);
                 if (Board.ValidPosition(positionNow) && HasAnEnemy(positionNow)) matrix[positionNow.Row, positionNow.Column] = true;
+
+                // # Special - En Passant
+                if (Position!.Row == 3)
+                {
+                    Position left = new Position(Position!.Row, Position!.Column - 1);
+                    if (Board!.ValidPosition(left) && HasAnEnemy(left) && Board!.Part(left) == MatchChess.VulnerableEnPassant) matrix[left.Row - 1, left.Column] = true;
+
+                    Position right = new Position(Position!.Row, Position!.Column + 1);
+                    if (Board!.ValidPosition(right) && HasAnEnemy(right) && Board!.Part(right) == MatchChess.VulnerableEnPassant) matrix[right.Row - 1, right.Column] = true;
+                }
             }
             else // Black Pawns
             {
@@ -64,6 +79,17 @@ namespace Chess
 
                 positionNow.DefineValues(Position!.Row + 1, Position!.Column + 1);
                 if (Board.ValidPosition(positionNow) && HasAnEnemy(positionNow)) matrix[positionNow.Row, positionNow.Column] = true;
+
+                // # Special - En Passant
+                if (Position!.Row == 4)
+                {
+                    Position left = new Position(Position!.Row, Position!.Column - 1);
+                    if (Board!.ValidPosition(left) && HasAnEnemy(left) && Board!.Part(left) == MatchChess.VulnerableEnPassant) matrix[left.Row + 1, left.Column] = true;
+
+                    Position right = new Position(Position!.Row, Position!.Column + 1);
+                    if (Board!.ValidPosition(right) && HasAnEnemy(right) && Board!.Part(right) == MatchChess.VulnerableEnPassant) matrix[right.Row + 1, right.Column] = true;
+                }
+
             }
 
             return matrix;
